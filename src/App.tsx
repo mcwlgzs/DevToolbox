@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { NotFoundPage } from '@/components/not-found'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { GitHubLink } from '@/components/github-link'
 import { HomePage, ToolShell } from '@/components/tool-shell'
 import { SiteHeader } from '@/components/site-header'
 import { ToolSidebar } from '@/components/tool-sidebar'
@@ -158,9 +159,12 @@ function Shell() {
                 </a>
               ))}
             </nav>
-            <p className="text-xs text-muted-foreground">
-              {SITE_NAME} · 全部计算在浏览器本地完成，数据不上传 · 快捷键 Ctrl / ⌘ + K 搜索工具
-            </p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <p className="text-xs text-muted-foreground">
+                {SITE_NAME} · 全部计算在浏览器本地完成，数据不上传 · 快捷键 Ctrl / ⌘ + K 搜索工具
+              </p>
+              <GitHubLink className="text-xs" />
+            </div>
           </div>
         </footer>
       </div>

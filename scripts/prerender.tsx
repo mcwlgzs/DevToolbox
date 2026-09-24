@@ -16,7 +16,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { renderToString } from 'react-dom/server'
 import App from '../src/App.tsx'
-import { HOME_TOOL, SITE_NAME, TOOLS, toolUrl, type ToolMeta } from '../src/tools/registry.ts'
+import { HOME_TOOL, SITE_NAME, SITE_REPO_URL, TOOLS, toolUrl, type ToolMeta } from '../src/tools/registry.ts'
 
 const siteUrl = (import.meta.env.VITE_SITE_URL || 'https://example.com').replace(/\/+$/, '')
 const distDir = resolve(process.cwd(), 'dist')
@@ -55,6 +55,7 @@ function buildSeoBlock(tool: ToolMeta): string {
       inLanguage: 'zh-CN',
       description: HOME_TOOL.description,
       isAccessibleForFree: true,
+      codeRepository: SITE_REPO_URL,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       featureList: TOOLS.filter((item) => item.slug).map((item) => item.name),
     },

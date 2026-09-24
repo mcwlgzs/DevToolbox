@@ -59,6 +59,9 @@ export interface ToolMeta {
 export const SITE_NAME = 'DevToolbox'
 export const SITE_TAGLINE = '开发者在线工具箱'
 
+/** 源码仓库地址：页脚链接与 JSON-LD 的 codeRepository 都用它，避免两处各写一遍。 */
+export const SITE_REPO_URL = 'https://github.com/mcwlgzs/DevToolbox'
+
 export const HOME_TOOL: ToolMeta = {
   slug: '',
   path: '/',
