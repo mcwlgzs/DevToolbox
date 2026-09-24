@@ -47,20 +47,22 @@ export function SiteHeader({ theme, onToggleTheme }: SiteHeaderProps) {
           </span>
         </Link>
 
-        <div className="ml-auto flex items-center gap-2">
-          {/* 侧边栏收起 / 展开：只对宽屏有意义，窄屏侧边栏本来就不显示 */}
-          <Button
-            variant="outline"
-            size="icon"
-            className="hidden lg:inline-flex"
-            aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
-            aria-expanded={!collapsed}
-            aria-controls="tool-sidebar"
-            onClick={toggleSidebar}
-          >
-            {collapsed ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
-          </Button>
+        {/* 侧边栏收起 / 展开：紧挨着它控制的侧边栏放在左侧，
+            而不是丢到右边的搜索框旁边——那样位置和对象离得太远，看着别扭。
+            只对宽屏有意义，窄屏侧边栏本来就不显示。 */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="hidden lg:inline-flex"
+          aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
+          aria-expanded={!collapsed}
+          aria-controls="tool-sidebar"
+          onClick={toggleSidebar}
+        >
+          {collapsed ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
+        </Button>
 
+        <div className="ml-auto flex items-center gap-2">
           <ToolSearch />
 
           <span className="hidden items-center gap-1.5 text-xs text-muted-foreground xl:inline-flex">
