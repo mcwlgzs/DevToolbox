@@ -13,7 +13,7 @@ import {
 } from '../src/lib/base64.ts'
 import { formatBytes } from '../src/lib/format.ts'
 import { hexToBytes, toHex } from '../src/lib/hash.ts'
-import { computeTargetSize } from '../src/lib/image.ts'
+import { computeTargetSize, describeDecodeFailure } from '../src/lib/image.ts'
 import {
   colorScale,
   contrastRatio,
@@ -629,6 +629,23 @@ check('哈希：hexToBytes 与 hmac.parseKey 的十六进制写法一致', () =>
   assert.equal(toHex(hexToBytes('41 42')!), '4142')
   assert.equal(hexToBytes('0x4'), null, '奇数位仍应拒绝')
   assert.equal(hexToBytes('zz'), null)
+})
+
+check('图片：解码失败时给出可操作的中文提示', () => {
+  // 浏览器原始报错是英文的一句话，对用户没有任何指导意义
+  const svg = new File(['<svg/>'], 'vector.svg', { type: 'image/svg+xml' })
+  assert.match(describeDecodeFailure(svg), /矢量图（SVG）/)
+  assert.match(describeDecodeFailure(svg), /PNG/)
+
+  // HEIC 按 MIME 与扩展名两条路都能识别（iPhone 传过来时 type 常为空）
+  assert.match(describeDecodeFailure(new File([], 'a.heic', { type: 'image/heic' })), /HEIC/)
+  assert.match(describeDecodeFailure(new File([], 'IMG_0001.HEIC', { type: '' })), /HEIC/)
+
+  // 其它情况给通用提示，但要说清是什么格式
+  const broken = describeDecodeFailure(new File([], 'a.png', { type: 'image/png' }))
+  assert.match(broken, /无法解码/)
+  assert.match(broken, /PNG/)
+  assert.match(describeDecodeFailure(new File([], 'x', { type: '' })), /未知格式/)
 })
 
 console.log(`\n${passed} checks passed`)

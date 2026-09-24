@@ -36,8 +36,32 @@ export function isImageFile(file: File): boolean {
   return file.type.startsWith('image/')
 }
 
+/**
+ * 把 createImageBitmap 的解码失败翻译成可操作的中文提示。
+ *
+ * 浏览器给的原始信息是英文一句话（"The source image could not be decoded."），
+ * 用户看了也不知道下一步该做什么，所以按常见的两类原因分别说明。
+ * 抽成纯函数是为了能直接写单测覆盖这些文案。
+ */
+export function describeDecodeFailure(file: File): string {
+  if (file.type === 'image/svg+xml' || /\.svg$/i.test(file.name)) {
+    return '矢量图（SVG）没有固定像素尺寸，浏览器无法把它当作位图读取。请先用其它工具导出成 PNG 再压缩。'
+  }
+  if (file.type === 'image/heic' || file.type === 'image/heif' || /\.(heic|heif)$/i.test(file.name)) {
+    return '浏览器不支持解码 HEIC / HEIF（iPhone 默认格式）。请在手机或系统相册里先导出成 JPEG。'
+  }
+  const kind = file.type.replace('image/', '').toUpperCase() || '未知格式'
+  return `无法解码这个 ${kind} 文件：可能是文件损坏、被截断，或该格式浏览器本身不支持。`
+}
+
 export async function loadImage(file: File): Promise<ImageSource> {
-  const bitmap = await createImageBitmap(file)
+  let bitmap: ImageBitmap
+  try {
+    bitmap = await createImageBitmap(file)
+  } catch {
+    throw new Error(describeDecodeFailure(file))
+  }
+
   if (bitmap.width * bitmap.height > MAX_PIXELS) {
     bitmap.close()
     throw new Error('图片像素过大（超过 4000 万像素），请先在其他工具中缩小')
@@ -116,6 +140,20 @@ export async function processImage(
   })
 
   if (!blob) throw new Error('导出失败，可能是格式或尺寸不受支持')
+
+  /**
+   * 关键校验：浏览器遇到不支持的编码格式时**不会**返回 null，
+   * 而是静默回退成 PNG。实测 Edge/Chrome 里 toBlob('image/avif') 返回的就是 image/png。
+   *
+   * 不校验的话，Safari 16 以下（不支持 Canvas 编码 WebP）会产出一份
+   * 实际是 PNG、文件名却是 .webp 的坏文件——用户拿到手里才发现打不开。
+   */
+  if (blob.type !== options.format) {
+    throw new Error(
+      `当前浏览器不支持把图片编码成 ${options.format.replace('image/', '').toUpperCase()}，` +
+        `实际导出的是 ${blob.type.replace('image/', '').toUpperCase()}。请换一种输出格式。`,
+    )
+  }
 
   return {
     blob,
