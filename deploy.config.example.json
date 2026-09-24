@@ -1,0 +1,8 @@
+{
+  "host": "45.207.211.238",
+  "user": "root",
+  "port": 22,
+  "path": "/var/www/devtoolbox/dist",
+  "owner": "www-data:www-data",
+  "reload": "nginx"
+}
