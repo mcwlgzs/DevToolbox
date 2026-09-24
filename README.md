@@ -1,6 +1,6 @@
 # DevToolbox · 开发者在线工具箱
 
-23 个高频开发小工具，全部运行在浏览器本地。输入内容不发送到任何服务器，页面加载完成后断网也能继续使用。
+24 个高频开发小工具，全部运行在浏览器本地。输入内容不发送到任何服务器，页面加载完成后断网也能继续使用。
 
 > 工具选型参考了 [it-tools](https://github.com/CorentinTh/it-tools)（约 3 万 star）的公开清单，优先补齐其中「纯前端可完成、可测试」的高频项。
 
@@ -22,6 +22,7 @@
 | | `/diff/` | 文本对比 | 逐行 Diff，并排与 unified 视图，导出 .patch |
 | | `/text/` | 文本变换 | 10 种命名风格、排序去重、行操作、字数统计、可撤销 |
 | 图片 / 颜色 | `/image/` | 图片压缩 | 本地 Canvas 缩放与 JPEG / PNG / WebP 转换 |
+| | `/image-convert/` | 图片格式转换 | 批量 PNG / JPG / WebP 互转，保持原尺寸，可打包 ZIP 下载 |
 | | `/color/` | 颜色转换 | HEX / RGB / HSL / HSV 互转、色阶、配色、WCAG 对比度 |
 | 时间 / 生成 | `/timestamp/` | 时间戳转换 | 秒毫秒自动识别，UTC / 本地 / 星期 / 相对时间 |
 | | `/cron/` | Cron 表达式 | 字段展开、中文含义、接下来 8 次运行时间 |
@@ -66,12 +67,12 @@ npm run dev        # http://localhost:5173
 | 命令 | 说明 |
 | --- | --- |
 | `npm run dev` | 开发服务器（HMR） |
-| `npm run build` | `tsc -b` + `vite build` + **预渲染 25 个路由**，产物在 `dist/` |
+| `npm run build` | `tsc -b` + `vite build` + **预渲染 26 个路由**，产物在 `dist/` |
 | `npm run build:spa` | 跳过预渲染，仅用于对比排查 hydration 问题 |
 | `npm run preview` | 预览生产构建（`vite preview` 支持目录 index 路由） |
 | `npm run lint` | oxlint 静态检查 |
 | `npm run test` | 编解码 / 哈希 / 清单 / 颜色 / 编码 / diff / 文本 / 正则 / 单位 / XML / SQL / 数学 / Cron / JWT 自检，共 175+ 项断言（Node 原生运行 `.mts`，无测试框架） |
-| `npm run smoke` | 25 个路由的 SSR 渲染冒烟 |
+| `npm run smoke` | 26 个路由的 SSR 渲染冒烟 |
 | `node scripts/hash-constants.mts` | 重新推导 SHA-256 常量表，用于核对 |
 
 ## SEO
@@ -84,8 +85,8 @@ npm run dev        # http://localhost:5173
 | 每路由独立元信息 | 预渲染脚本替换 `index.html` 中 `<!-- seo:start -->` … `<!-- seo:end -->` 区块，写入该路由的 `<title>`、description、keywords、canonical、OG、Twitter |
 | 结构化数据 | 每页 JSON-LD `@graph`：`WebApplication` + `WebPage` + `BreadcrumbList` + `FAQPage`（FAQ 文本与页面可见内容一致） |
 | 语义结构 | 每页唯一 `h1`、分区 `h2`、FAQ 用 `h3`；FAQ 与正文在工具下方，不阻挡操作 |
-| 内链 | 顶栏导航、首页工具卡片、页脚工具链接全部是真实 `<a href>`，爬虫可遍历全部 23 个工具，侧边栏与命令面板仍保留原生 `<a href>` |
-| 爬虫文件 | `robots.txt` 与 `sitemap.xml`（含首页与 23 个工具，共 24 个 URL；404 不收录）由预渲染脚本生成 |
+| 内链 | 顶栏导航、首页工具卡片、页脚工具链接全部是真实 `<a href>`，爬虫可遍历全部 24 个工具，侧边栏与命令面板仍保留原生 `<a href>` |
+| 爬虫文件 | `robots.txt` 与 `sitemap.xml`（含首页与 24 个工具，共 25 个 URL；404 不收录）由预渲染脚本生成 |
 | 404 处理 | 生成 `dist/404.html`（`noindex`，不进入 sitemap）；客户端路由对未知路径渲染 404 页面 |
 | 客户端接管 | `main.tsx` 比对 `<html data-prerender>` 与当前地址：一致才 `hydrateRoot`，否则 `createRoot` 完整渲染 |
 | 可见面包屑 | 工具页有「全部工具 › 工具名」面包屑，与 JSON-LD 的 `BreadcrumbList` 一一对应 |
@@ -139,7 +140,7 @@ src/
 │   └── link.tsx                # Link：拦截左键做客户端跳转，保留 Ctrl+点击等原生行为
 ├── tools/
 │   ├── registry.ts             # ★ 全站单一数据源：路由、分类、标题、描述、关键词、正文、FAQ
-│   ├── base64-tool.tsx         # 23 个工具页
+│   ├── base64-tool.tsx         # 24 个工具页
 │   ├── hash-tool.tsx           #   哈希页外壳（三个常驻面板，切换不丢状态）
 │   ├── hash-single-panel.tsx   #     文本 / 单个文件
 │   ├── hash-batch.tsx          #     批量计算与重复检测
@@ -149,6 +150,7 @@ src/
 │   ├── diff-tool.tsx           #   文本对比
 │   ├── text-tool.tsx           #   文本处理
 │   ├── image-tool.tsx          #   图片压缩
+│   ├── image-convert-tool.tsx  #   图片格式转换（批量 + 打包 ZIP）
 │   ├── color-tool.tsx          #   颜色转换
 │   ├── xml-tool.tsx            #   XML ⇄ JSON
 │   ├── sql-tool.tsx            #   SQL 格式化 / 压缩
@@ -202,6 +204,7 @@ src/
 │   ├── sql.ts                  # SQL 分词、格式化与压缩（不改写字符串 / 注释）
 │   ├── math-eval.ts            # 数学表达式：调度场算法转逆波兰后求值（不用 eval）
 │   ├── jwt.ts                  # JWT 的 Base64URL、HS256 签发与定长比较验签
+│   ├── zip.ts                  # 极简 ZIP 写入器（STORE + CRC-32，零依赖）
 │   ├── seo.ts                  # 客户端路由切换时同步 head
 │   ├── format.ts               # 字节格式化、剪贴板、下载、预览截断
 │   └── utils.ts                # cn()
@@ -221,6 +224,7 @@ scripts/
 ├── toolkit.test.mts            # 颜色 / 编码 / cron / 子网 / chmod / 图片等自检
 ├── toolkit2.test.mts           # 单位 / XML / SQL / 数学自检（含 SQL 安全红线用例）
 ├── jwt.test.mts                # JWT 自检（jwt.io 官方示例逐字节比对 + 篡改检测）
+├── zip.test.mts                # ZIP 写入器自检（独立解析器反解 + 目录穿越清理）
 └── hash-constants.mts          # SHA-256 常量表推导脚本
 ```
 
@@ -252,7 +256,7 @@ scripts/
 - 所有可能产生服务端/客户端差异的内容都被隔离：主题图标用 `useHydrated()`（`useSyncExternalStore` 的 server snapshot）推迟到 hydration 之后；随机 UUID 在 `useMemo` 中依赖 `hydrated`；实时时钟用 `use-now.ts` 的 server snapshot 返回 0；「最近使用」用同样的外部存储模式；哈希页的非默认标签面板在 hydration 之后才挂载。
 - `<html data-prerender="…">` 记录每个静态文件对应的路由。客户端地址与它不一致时（典型场景：托管方把未知路径回退到 `index.html`）改用 `createRoot` 完整渲染，而不是硬 hydrate——否则服务端是首页、客户端是 404，会触发 React #418。
 - **注意 `String.replace` 的替换串陷阱**：注入预渲染 HTML 时必须用函数式替换 `html.replace(marker, () => injected)`。字符串替换串里的 `$&`、`$'`、`` $` ``、`$1` 都是特殊模式——页面文案里出现 `$&`（例如正则工具的占位符说明）时会被替换成匹配到的标记，把产物 HTML 污染掉，并直接导致 hydration 失败。预渲染脚本现在会在每次注入后断言 `#root` 恰好出现一次。
-- 实测 24 个路由（23 个工具页 + 首页）与 404 页均无 hydration 告警与未捕获异常（无头 Edge + CDP 逐页实测，含页签切换与输入联动）。
+- 实测 25 个路由（24 个工具页 + 首页）与 404 页均无 hydration 告警与未捕获异常（无头 Edge + CDP 逐页实测，含页签切换与输入联动）。
 
 **性能与安全**
 - 字节 → 二进制字符串按 32 KB 分块，避免 `String.fromCharCode(...bytes)` 触发调用栈溢出；超过 200,000 字符的输出只在 DOM 中截断预览，"复制"仍是完整数据。

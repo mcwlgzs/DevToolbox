@@ -24,6 +24,7 @@ import { HashTool } from '@/tools/hash-tool'
 import { HmacTool } from '@/tools/hmac-tool'
 import { HttpTool } from '@/tools/http-tool'
 import { ImageTool } from '@/tools/image-tool'
+import { ImageConvertTool } from '@/tools/image-convert-tool'
 import { JsonTool } from '@/tools/json-tool'
 import { JwtTool } from '@/tools/jwt-tool'
 import { MathTool } from '@/tools/math-tool'
@@ -62,6 +63,7 @@ const RENDERERS: Record<string, ComponentType> = {
   sql: SqlTool,
   units: UnitsTool,
   math: MathTool,
+  'image-convert': ImageConvertTool,
 }
 
 /** 客户端路由切换后同步 <title> / description / canonical / og，并记录「最近使用」。 */

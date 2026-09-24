@@ -12,6 +12,7 @@ import {
   GlobeIcon,
   HashIcon,
   ImageIcon,
+  ImagesIcon,
   KeyRoundIcon,
   LayoutGridIcon,
   Link2Icon,
@@ -59,5 +60,6 @@ export function ToolIcon({ slug, className }: ToolIconProps) {
   if (slug === 'sql') return <DatabaseIcon className={className} />
   if (slug === 'units') return <RulerIcon className={className} />
   if (slug === 'math') return <CalculatorIcon className={className} />
+  if (slug === 'image-convert') return <ImagesIcon className={className} />
   return <LayoutGridIcon className={className} />
 }

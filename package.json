@@ -9,7 +9,7 @@
     "build:spa": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node scripts/base64.test.mts && node scripts/hash.test.mts && node scripts/manifest.test.mts && node scripts/tools.test.mts && node scripts/toolkit.test.mts && node scripts/toolkit2.test.mts && node scripts/jwt.test.mts",
+    "test": "node scripts/base64.test.mts && node scripts/hash.test.mts && node scripts/manifest.test.mts && node scripts/tools.test.mts && node scripts/toolkit.test.mts && node scripts/toolkit2.test.mts && node scripts/jwt.test.mts && node scripts/zip.test.mts",
     "smoke": "vite build --ssr scripts/ssr-smoke.tsx --outDir node_modules/.tmp/ssr --emptyOutDir && node node_modules/.tmp/ssr/ssr-smoke.js",
     "deploy": "node scripts/deploy.mjs",
     "deploy:dry": "node scripts/deploy.mjs --dry-run"

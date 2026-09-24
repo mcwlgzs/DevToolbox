@@ -62,63 +62,13 @@ export const SITE_TAGLINE = '开发者在线工具箱'
 /** 源码仓库地址：页脚链接与 JSON-LD 的 codeRepository 都用它，避免两处各写一遍。 */
 export const SITE_REPO_URL = 'https://github.com/mcwlgzs/DevToolbox'
 
-export const HOME_TOOL: ToolMeta = {
-  slug: '',
-  path: '/',
-  category: 'encode',
-  name: '全部工具',
-  title: '在线工具箱 — Base64 / MD5 / JSON / SQL / 单位换算',
-  description:
-    '免费在线开发者工具箱：Base64 编解码、MD5 / SHA-256 校验、JSON 与 SQL 格式化、JWT 签发验签、单位换算与时间戳转换，全部在浏览器本地运行。',
-  summary: 'Base64、哈希校验、JSON、SQL、JWT、单位换算 —— 23 个纯本地工具',
-  keywords: [
-    '在线工具箱',
-    '开发者工具',
-    'Base64 编码',
-    'MD5 校验',
-    'SHA256',
-    'URL 编解码',
-    'JSON 格式化',
-    'SQL 格式化',
-    'JWT 签发',
-    'JWT 验签',
-    '单位换算',
-    'XML 转 JSON',
-    '数学表达式计算',
-    'Unix 时间戳转换',
-    'UUID 生成',
-    '浏览器本地运行',
-  ],
-  about: [
-    'DevToolbox 是一个完全运行在浏览器里的开发者工具箱。所有计算都由本页面的 JavaScript 完成，输入内容不会发送到任何服务器，因此可以放心处理接口响应、日志、密钥片段等敏感数据；页面加载完成后即使断网也能正常使用。',
-    '目前包含 23 个高频工具：Base64 编解码、MD5 / SHA-1 / SHA-256 哈希计算与批量文件校验、HMAC 签名、URL 编解码、JSON / CSV / XML / SQL 格式化与互转、JWT 解析与 HS256 签发验签、正则测试、文本对比与批量文本处理、图片压缩、颜色转换、Unix 时间戳转换、Cron 表达式解析、UUID 与随机串生成、单位换算、数学表达式计算、IP 子网计算、chmod 权限计算与 HTTP 状态码速查。每个工具都支持键盘操作与一键复制结果。',
-  ],
-  faq: [
-    {
-      question: '这些工具会把我的数据上传到服务器吗？',
-      answer:
-        '不会。所有编解码、哈希与格式化都在浏览器内完成，页面不发送任何包含用户输入的请求。你可以打开浏览器开发者工具的 Network 面板验证：除了页面自身资源，不会有额外请求。',
-    },
-    {
-      question: '为什么哈希工具同时提供 MD5 和 SHA-256？',
-      answer:
-        'MD5 速度快、生态广泛，很多下载站与网盘仍以 MD5 作为校验值，因此保留；但它已被证明存在碰撞，不能用于安全场景。SHA-256 是目前推荐的完整性校验与签名算法，新项目应优先使用。',
-    },
-    {
-      question: '可以离线使用吗？',
-      answer:
-        '可以。首次打开后所有逻辑都在本地执行，MD5、SHA-1、SHA-256 均为纯 JavaScript 实现，不依赖 Web Crypto，因此即使以 file:// 方式打开页面也能正常工作。',
-    },
-    {
-      question: '支持多大的文件？',
-      answer:
-        'Base64 工具的单文件上限为 32 MB。哈希工具的批量模式没有实际上限：文件按 4 MB 分块流式读取，GB 级视频也可以直接拖入，只是耗时随体积增长。',
-    },
-  ],
-}
-
-export const TOOLS: readonly ToolMeta[] = [
-  HOME_TOOL,
+/**
+ * 工具条目（不含首页）。
+ *
+ * 单独抽出来是为了让首页文案里的工具数量能写成 `${TOOL_ENTRIES.length}`——
+ * 那个数字以前是手写的，加一个工具就要记得改四处，很容易漏。
+ */
+const TOOL_ENTRIES: readonly ToolMeta[] = [
   {
     slug: 'base64',
     path: '/base64/',
@@ -580,6 +530,52 @@ export const TOOLS: readonly ToolMeta[] = [
     ],
   },
   {
+    slug: 'image-convert',
+    path: '/image-convert/',
+    category: 'media',
+    name: '图片格式转换',
+    title: '图片格式转换 — PNG / JPG / WebP 批量互转，本地完成',
+    description:
+      '在线批量图片格式转换：PNG、JPG、WebP 互转，一次拖入多张统一转换，可逐个下载或打包成 ZIP。图片不上传，纯浏览器本地运行。',
+    summary: '批量 PNG / JPG / WebP 互转，保持原尺寸，可打包 ZIP 下载',
+    keywords: [
+      '图片格式转换',
+      'PNG 转 JPG',
+      'JPG 转 WebP',
+      'PNG 转 WebP',
+      'WebP 转 PNG',
+      '批量图片转换',
+      '图片格式批量转换',
+      '在线图片转换',
+    ],
+    about: [
+      '图片格式转换的目的通常很具体：网站要换成体积更小的 WebP、某些系统只收 JPG、需要透明通道就得用 PNG。换格式不等于压缩——它只改变编码方式，像素尺寸完全不变，所以体积可能变小（PNG 转 WebP）也可能变大（JPG 转 PNG）。',
+      '本工具与「图片压缩」侧重点不同：这里面向批量场景，可以一次拖入几十张图统一转格式，逐张显示转换后的体积，然后单独下载或一次性打包成 ZIP。所有解码与编码都通过浏览器内置的 Canvas 完成，图片不会离开本机；ZIP 也是本地生成，没有引入第三方压缩库。解码失败时会明确指出原因（例如 SVG 没有固定像素尺寸、HEIC 是苹果私有格式浏览器解不了），而不是丢一句英文报错。',
+    ],
+    faq: [
+      {
+        question: '换格式会降低画质吗？',
+        answer:
+          '取决于格式：JPEG 与 WebP 是有损格式，重新编码会损失一些细节，可以用上方的「质量」控制；PNG 是无损格式，转换不损失画质。需要注意的是，把 JPEG 转成 PNG 不会找回已经丢失的细节，只会让文件变大。反复在有损格式之间转来转去会累积损失，建议始终从原图开始转。',
+      },
+      {
+        question: '为什么转换成 PNG 后文件变大了？',
+        answer:
+          'PNG 是无损格式，对照片这类连续色调的内容压缩效率远不如 JPEG 与 WebP。把一张 JPEG 照片转成 PNG，体积涨几倍是正常的。照片建议输出 JPEG 或 WebP；截图、图标、需要透明的图才用 PNG。',
+      },
+      {
+        question: '支持 HEIC（iPhone 照片）吗？',
+        answer:
+          '不支持。HEIC / HEIF 是苹果的私有编码，浏览器没有内置解码器，因此无法在本地读取——这不是工具的限制，而是浏览器的能力边界。请在手机或系统相册里先导出成 JPEG 再过来转换。同理，矢量图 SVG 没有固定像素尺寸，也无法当作位图转换。',
+      },
+      {
+        question: '一次能转多少张？',
+        answer:
+          '没有数量限制，但受可用内存约束。工具是串行处理的：每张解码、编码完立刻释放位图，因此内存占用与图片数量无关，只与单张尺寸有关（单张上限 4000 万像素）。几十张手机照片通常几秒内完成。',
+      },
+    ],
+  },
+  {
     slug: 'color',
     path: '/color/',
     category: 'media',
@@ -988,6 +984,70 @@ export const TOOLS: readonly ToolMeta[] = [
     ],
   },
 ]
+
+/**
+ * 首页条目。
+ *
+ * 声明在 TOOL_ENTRIES 之后，这样文案里的工具数量可以直接由数组长度派生，
+ * 不会出现「加了工具但文案还写着旧数字」的情况。
+ */
+export const HOME_TOOL: ToolMeta = {
+  slug: '',
+  path: '/',
+  category: 'encode',
+  name: '全部工具',
+  title: '在线工具箱 — Base64 / MD5 / JSON / SQL / 单位换算',
+  description:
+    '免费在线开发者工具箱：Base64 编解码、MD5 / SHA-256 校验、JSON 与 SQL 格式化、JWT 签发验签、图片格式转换、单位换算与时间戳转换，全部在浏览器本地运行。',
+  summary: `Base64、哈希校验、JSON、SQL、JWT、图片格式转换 —— ${TOOL_ENTRIES.length} 个纯本地工具`,
+  keywords: [
+    '在线工具箱',
+    '开发者工具',
+    'Base64 编码',
+    'MD5 校验',
+    'SHA256',
+    'URL 编解码',
+    'JSON 格式化',
+    'SQL 格式化',
+    'JWT 签发',
+    'JWT 验签',
+    '图片格式转换',
+    '单位换算',
+    'XML 转 JSON',
+    '数学表达式计算',
+    'Unix 时间戳转换',
+    'UUID 生成',
+    '浏览器本地运行',
+  ],
+  about: [
+    'DevToolbox 是一个完全运行在浏览器里的开发者工具箱。所有计算都由本页面的 JavaScript 完成，输入内容不会发送到任何服务器，因此可以放心处理接口响应、日志、密钥片段等敏感数据；页面加载完成后即使断网也能正常使用。',
+    `目前包含 ${TOOL_ENTRIES.length} 个高频工具：Base64 编解码、MD5 / SHA-1 / SHA-256 哈希计算与批量文件校验、HMAC 签名、URL 编解码、JSON / CSV / XML / SQL 格式化与互转、JWT 解析与 HS256 签发验签、正则测试、文本对比与批量文本处理、图片压缩与图片格式转换、颜色转换、Unix 时间戳转换、Cron 表达式解析、UUID 与随机串生成、单位换算、数学表达式计算、IP 子网计算、chmod 权限计算与 HTTP 状态码速查。每个工具都支持键盘操作与一键复制结果。`,
+  ],
+  faq: [
+    {
+      question: '这些工具会把我的数据上传到服务器吗？',
+      answer:
+        '不会。所有编解码、哈希与格式化都在浏览器内完成，页面不发送任何包含用户输入的请求。你可以打开浏览器开发者工具的 Network 面板验证：除了页面自身资源，不会有额外请求。',
+    },
+    {
+      question: '为什么哈希工具同时提供 MD5 和 SHA-256？',
+      answer:
+        'MD5 速度快、生态广泛，很多下载站与网盘仍以 MD5 作为校验值，因此保留；但它已被证明存在碰撞，不能用于安全场景。SHA-256 是目前推荐的完整性校验与签名算法，新项目应优先使用。',
+    },
+    {
+      question: '可以离线使用吗？',
+      answer:
+        '可以。首次打开后所有逻辑都在本地执行，MD5、SHA-1、SHA-256 均为纯 JavaScript 实现，不依赖 Web Crypto，因此即使以 file:// 方式打开页面也能正常工作。',
+    },
+    {
+      question: '支持多大的文件？',
+      answer:
+        'Base64 工具的单文件上限为 32 MB。哈希工具的批量模式没有实际上限：文件按 4 MB 分块流式读取，GB 级视频也可以直接拖入，只是耗时随体积增长。图片工具的单张上限是 4000 万像素。',
+    },
+  ],
+}
+
+export const TOOLS: readonly ToolMeta[] = [HOME_TOOL, ...TOOL_ENTRIES]
 
 function normalizePath(pathname: string): string {
   const clean = pathname.split('?')[0].split('#')[0]
