@@ -37,6 +37,8 @@ export function ToolSidebar({ className }: { className?: string }) {
 
   return (
     <aside
+      id="tool-sidebar"
+      data-slot="tool-sidebar"
       className={cn(
         'scrollbar-thin sticky top-14 hidden max-h-[calc(100svh-3.5rem)] w-[212px] shrink-0 overflow-y-auto border-r border-border/60 pr-3 lg:block',
         className,

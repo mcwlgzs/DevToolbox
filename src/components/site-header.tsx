@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LayoutGridIcon, ShieldCheckIcon } from 'lucide-react'
+import { LayoutGridIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, ShieldCheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,6 +15,7 @@ import { Link } from '@/router/link'
 import { useRouter } from '@/router/context'
 import { CATEGORIES, SITE_NAME, TOOLS } from '@/tools/registry'
 import { cn } from '@/lib/utils'
+import { toggleSidebar, useSidebarCollapsed } from '@/hooks/use-sidebar'
 import type { Theme } from '@/hooks/use-theme'
 
 interface SiteHeaderProps {
@@ -25,6 +26,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ theme, onToggleTheme }: SiteHeaderProps) {
   const { path } = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
+  const collapsed = useSidebarCollapsed()
   const tools = TOOLS.filter((tool) => tool.slug !== '')
 
   return (
@@ -46,6 +48,19 @@ export function SiteHeader({ theme, onToggleTheme }: SiteHeaderProps) {
         </Link>
 
         <div className="ml-auto flex items-center gap-2">
+          {/* 侧边栏收起 / 展开：只对宽屏有意义，窄屏侧边栏本来就不显示 */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="hidden lg:inline-flex"
+            aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
+            aria-expanded={!collapsed}
+            aria-controls="tool-sidebar"
+            onClick={toggleSidebar}
+          >
+            {collapsed ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
+          </Button>
+
           <ToolSearch />
 
           <span className="hidden items-center gap-1.5 text-xs text-muted-foreground xl:inline-flex">

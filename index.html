@@ -45,9 +45,9 @@
     <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
     <!-- seo:end -->
 
-    <!-- 首屏前确定主题，避免深/浅色闪烁；同时保证 hydration 前后样式一致 -->
+    <!-- 首屏前确定主题与侧边栏状态，避免深/浅色或布局闪烁；同时保证 hydration 前后一致 -->
     <script>
-      (function () {
+      ;(function () {
         try {
           var stored = localStorage.getItem('devtoolbox:theme')
           var theme =
@@ -60,6 +60,13 @@
           document.documentElement.style.colorScheme = theme
         } catch (error) {
           /* localStorage 不可用时保持默认深色 */
+        }
+        try {
+          // 侧边栏：提前把属性写上去，收起的用户不会先看到它展开再收起来
+          document.documentElement.dataset.sidebar =
+            localStorage.getItem('devtoolbox:sidebar') === 'collapsed' ? 'collapsed' : 'expanded'
+        } catch (error) {
+          document.documentElement.dataset.sidebar = 'expanded'
         }
       })()
     </script>

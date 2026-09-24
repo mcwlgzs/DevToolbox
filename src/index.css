@@ -166,3 +166,15 @@
   background-size: 44px 44px;
   mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%);
 }
+
+/*
+ * 侧边栏收起状态。
+ *
+ * 可见性由 <html data-sidebar> 决定，而不是让 React 去改 aside 的 class：
+ * 这样服务端与 hydration 首帧的 DOM 完全一致（不会出现 React #418），
+ * 同时 index.html 里的内联脚本能在首次绘制前就把属性设好，收起时也就不会闪一下。
+ */
+html[data-sidebar='collapsed'] [data-slot='tool-sidebar'] {
+  display: none;
+}
+

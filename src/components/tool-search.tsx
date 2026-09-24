@@ -134,9 +134,6 @@ export function ToolSearch() {
               aria-label="搜索工具"
               className="h-8 border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0 dark:bg-transparent"
             />
-            <kbd className="hidden rounded border border-border/70 bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:block">
-              Esc
-            </kbd>
           </div>
 
           <ul ref={listRef} className="scrollbar-thin max-h-[52vh] overflow-y-auto p-2">
@@ -180,9 +177,12 @@ export function ToolSearch() {
             )}
           </ul>
 
+          {/* 快捷键提示集中放在这里：搜索框那一行的右上角是对话框的关闭按钮，
+              之前把 Esc 提示放在那里会和它叠在一起 */}
           <div className="flex items-center gap-4 border-t border-border/60 px-4 py-2 text-[11px] text-muted-foreground">
             <span>↑↓ 选择</span>
             <span>↵ 打开</span>
+            <span>Esc 关闭</span>
             <span className="ml-auto">共 {results.length} 个工具</span>
           </div>
         </DialogContent>
