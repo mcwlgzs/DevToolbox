@@ -1,9 +1,12 @@
 /**
  * 摘要算法：MD5 / SHA-1 / SHA-256，全部为纯 JavaScript 实现。
  *
- * 为什么不用 Web Crypto？`crypto.subtle` 只在安全上下文（HTTPS / localhost）可用，
- * 用 file:// 直接打开页面时会缺失；而且它不支持 MD5，也不支持增量更新——
- * 意味着必须先把这个文件读进内存，几个 GB 的视频无法处理。
+ * 为什么不用 Web Crypto？
+ *   1. `crypto.subtle` 只在安全上下文可用。HTTPS 与 localhost 算，file:// 也算，
+ *      但 **http:// 加非 localhost 来源不算**（例如用局域网 IP 172.16.x.x 访问自建实例，
+ *      实测 crypto.subtle 为 undefined）。纯 JS 实现让这些环境下照样能算。
+ *   2. 它根本不支持 MD5。
+ *   3. 它没有增量接口——必须先整块读入内存，几个 GB 的视频无法处理。
  *
  * 因此这里提供两套入口：
  *   - 一次性：md5 / sha1 / sha256 / hashBytes

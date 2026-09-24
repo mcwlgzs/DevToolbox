@@ -1,7 +1,8 @@
 /**
  * 密码学安全随机数封装。
- * `crypto.getRandomValues` 在非安全上下文（file://）同样可用，
- * 仅在极老的环境下回落到 Math.random。
+ * `crypto.getRandomValues` 在非安全上下文（http:// 且非 localhost）同样可用，
+ * 与只在安全上下文才存在的 crypto.subtle 不同（实测：局域网 IP 下 subtle 为 undefined，
+ * 而 getRandomValues 仍在）。仅在极老的环境下回落到 Math.random。
  */
 
 const FALLBACK_ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'

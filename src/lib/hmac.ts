@@ -1,6 +1,6 @@
 /**
  * HMAC（RFC 2104）实现，构建在纯 JS 的 MD5 / SHA-1 / SHA-256 之上。
- * 不依赖 Web Crypto，因此在 file:// 环境下同样可用。
+ * 不依赖 Web Crypto，因此在 http:// 这类非安全上下文（crypto.subtle 不可用）下同样能算。
  */
 
 import { createHasher, toHex, type HashAlgorithm } from './hash.ts'

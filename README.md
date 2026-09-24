@@ -120,6 +120,11 @@ VITE_SITE_URL=https://your-domain.com
 
 产物是目录式多页站点（`/hash/` → `dist/hash/index.html`），并且带一个 `dist/404.html`。
 
+> **不能直接双击 `dist/index.html` 使用。** 站点的脚本与样式用绝对路径引用（`/assets/…`），
+> 目录式多路由结构也没法改成相对路径（`/hash/` 页面会去找 `/hash/assets/…`）。
+> 以 `file://` 打开时 CSS 与 JS 都会加载失败，只剩预渲染的静态 HTML——看起来正常，实际完全不可交互。
+> 想本地离线使用，用任意静态服务器打开：`npx serve dist`，加载完成后断网也能继续用。
+
 | 托管 | 配置 |
 | --- | --- |
 | Netlify / Cloudflare Pages / GitHub Pages | 无需配置，自动使用 `404.html` 并返回 404 状态码 |
@@ -231,7 +236,7 @@ scripts/
 ## 实现要点
 
 **哈希（`src/lib/hash.ts`）**
-- MD5、SHA-1、SHA-256 全部为纯 JavaScript 实现：`crypto.subtle` 只在安全上下文（HTTPS / localhost）可用，用 `file://` 直接打开页面时会缺失，纯 JS 保证任何环境都能算。
+- MD5、SHA-1、SHA-256 全部为纯 JavaScript 实现。`crypto.subtle` 只在安全上下文可用：HTTPS 与 localhost 算，`file://` 也算，但 **`http://` 加非 localhost 来源不算**（实测局域网 IP 下 `crypto.subtle` 为 `undefined`）；它还不支持 MD5，也没有增量接口。纯 JS 实现让这些环境下照样能算，并且能分块流式处理。
 - 提供两套入口：一次性（`hashBytes` / `hashBytesSync`）与**增量式**（`createHasher().update(chunk).digest()`）。
 - 文件走增量式流式读取，默认 **4 MB 一片**，内存占用与文件大小无关：82 MB / 4 个文件 / 三种算法实测耗时 2.1 s，强制 GC 后 JS 堆仅 26 MB（其中最大单文件 60 MB）。
 - 一次读取同时喂给多个算法，多算一种算法的成本远低于重复读盘。
