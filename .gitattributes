@@ -1,0 +1,15 @@
+# 统一换行符，避免 Windows 与 macOS / Linux 之间出现整个文件的假差异
+* text=auto eol=lf
+
+# 二进制文件不要做任何转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# 锁文件在 diff / 合并时按生成物对待
+package-lock.json -diff linguist-generated

@@ -1,0 +1,36 @@
+{
+  "name": "base64",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && vite build --ssr scripts/prerender.tsx --outDir node_modules/.tmp/prerender --emptyOutDir && node node_modules/.tmp/prerender/prerender.js",
+    "build:spa": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "node scripts/base64.test.mts && node scripts/hash.test.mts && node scripts/manifest.test.mts && node scripts/tools.test.mts && node scripts/toolkit.test.mts && node scripts/toolkit2.test.mts && node scripts/jwt.test.mts",
+    "smoke": "vite build --ssr scripts/ssr-smoke.tsx --outDir node_modules/.tmp/ssr --emptyOutDir && node node_modules/.tmp/ssr/ssr-smoke.js"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.47.0",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

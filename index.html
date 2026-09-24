@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN" class="dark" data-prerender="/">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- seo:start 由 scripts/prerender.tsx 按路由替换为对应标题 / 描述 / canonical / JSON-LD -->
+    <!-- 这里的默认值只在未预渲染时（npm run build:spa / 开发服务器）生效，请与 registry.ts 的 HOME_TOOL 保持一致 -->
+    <title>在线工具箱 — Base64 / MD5 / JSON / SQL / 单位换算 | DevToolbox</title>
+    <meta
+      name="description"
+      content="免费在线开发者工具箱：Base64 编解码、MD5 与 SHA-256 哈希校验、JSON / SQL / XML 格式化、JWT 签发验签、单位换算与时间戳转换。全部在浏览器本地完成，数据不上传，断网可用。"
+    />
+    <meta
+      name="keywords"
+      content="在线工具箱,开发者工具,Base64 编码,MD5 校验,SHA256,JSON 格式化,SQL 格式化,JWT 签发,单位换算,Unix 时间戳转换,UUID 生成"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DevToolbox" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:title" content="在线工具箱 — Base64 / MD5 / JSON / SQL / 单位换算" />
+    <meta
+      property="og:description"
+      content="23 个开发者常用小工具，全部在浏览器本地运行，数据不上传。"
+    />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DevToolbox 开发者在线工具箱" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="在线工具箱 — Base64 / MD5 / JSON / SQL / 单位换算" />
+    <meta
+      name="twitter:description"
+      content="23 个开发者常用小工具，全部在浏览器本地运行，数据不上传。"
+    />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
+    <!-- seo:end -->
+
+    <!-- 首屏前确定主题，避免深/浅色闪烁；同时保证 hydration 前后样式一致 -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('devtoolbox:theme')
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+          document.documentElement.classList.toggle('dark', theme === 'dark')
+          document.documentElement.style.colorScheme = theme
+        } catch (error) {
+          /* localStorage 不可用时保持默认深色 */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
